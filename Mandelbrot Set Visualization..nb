@@ -1,0 +1,235 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      7871,        227]
+NotebookOptionsPosition[      6933,        207]
+NotebookOutlinePosition[      7352,        223]
+CellTagsIndexPosition[      7309,        220]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"parameters", " ", "for", " ", "the", " ", "Mandelbrot", " ", 
+     RowBox[{"set", ":", " ", 
+      RowBox[{"plot", " ", "range"}]}]}], ",", 
+    RowBox[{"image", " ", "resolution"}], ",", 
+    RowBox[{"and", " ", "maximum", " ", "number", " ", "of", " ", 
+     RowBox[{"iterations", "."}]}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"xmin", "=", 
+     RowBox[{"-", "2"}]}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Minimum", " ", "x"}], "-", 
+     RowBox[{"value", " ", "for", " ", "the", " ", "plot"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"xmax", "=", "2"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Maximum", " ", "x"}], "-", 
+     RowBox[{"value", " ", "for", " ", "the", " ", "plot"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ymin", "=", 
+     RowBox[{"-", "2"}]}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Minimum", " ", "y"}], "-", 
+     RowBox[{"value", " ", "for", " ", "the", " ", "plot"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ymax", "=", "2"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Maximum", " ", "y"}], "-", 
+     RowBox[{"value", " ", "for", " ", "the", " ", "plot"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"resolution", "=", "500"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Image", " ", "resolution"}], ",", 
+     RowBox[{"adjust", " ", "as", " ", "needed"}]}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"maxIterations", "=", "100"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{
+    "Maximum", " ", "number", " ", "of", " ", "iterations", " ", "for", " ", 
+     "the", " ", "Mandelbrot", " ", "algorithm"}], "*)"}]}]}]], "Input",
+ CellChangeTimes->{{3.912595790764744*^9, 3.9125960877698593`*^9}, {
+  3.9125961351309366`*^9, 3.9125961769871044`*^9}, {3.9125962634655385`*^9, 
+  3.9125962821057415`*^9}, {3.9125964335020366`*^9, 3.912596475052334*^9}},
+ CellLabel->"",ExpressionUUID->"a3539401-eb27-4396-a573-cc7befba56d3"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "generate", " ", "a", " ", "grid", " ", "of", " ", "complex", " ", 
+    "numbers", " ", "within", " ", "the", " ", "specified", " ", "plot", " ", 
+    "range"}], "*)"}], "\[IndentingNewLine]", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"xvals", "=", 
+     RowBox[{"Subdivide", "[", 
+      RowBox[{"xmin", ",", "xmax", ",", 
+       RowBox[{"resolution", "-", "1"}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"yvals", "=", 
+     RowBox[{"Subdivide", "[", 
+      RowBox[{"ymin", ",", "ymax", ",", 
+       RowBox[{"resolution", "-", "1"}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"complexGrid", "=", 
+     RowBox[{"Outer", "[", 
+      RowBox[{"Plus", ",", 
+       RowBox[{"xvals", " ", "I"}], ",", "yvals"}], "]"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.912596494816266*^9, 
+  3.9125964978881984`*^9}},ExpressionUUID->"9573df68-d6da-4695-b0ec-\
+54b0f53799ae"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", "implement", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"mandelbrotSet", "[", "zc_", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"z", "=", "zc"}], ",", 
+        RowBox[{"n", "=", "0"}]}], "}"}], ",", 
+      RowBox[{
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"n", "<", "maxIterations"}], "&&", 
+          RowBox[{
+           RowBox[{"Abs", "[", "z", "]"}], "<", "2"}]}], ",", 
+         RowBox[{
+          RowBox[{"z", "=", 
+           RowBox[{
+            RowBox[{"z", "^", "2"}], "+", "zc"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"n", "++"}], ";"}]}], "]"}], ";", "\[IndentingNewLine]", 
+       "n"}]}], "]"}]}], ";"}]}]], "Input",
+ CellChangeTimes->{{3.912596509616007*^9, 
+  3.9125965111763673`*^9}},ExpressionUUID->"c47eff85-45e2-4303-8023-\
+2f9a02e5cfee"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "Apply", " ", "the", " ", "Mandelbrot", " ", "algorithm", " ", "to", " ", 
+    "the", " ", "complex", " ", "grid", " ", "and", " ", "create", " ", "an", 
+    " ", 
+    RowBox[{"image", "."}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"mandelbrotImage", "=", 
+   RowBox[{"Image", "[", 
+    RowBox[{"Rescale", "[", 
+     RowBox[{
+      RowBox[{"ParallelMap", "[", 
+       RowBox[{"mandelbrotSet", ",", "complexGrid", ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "maxIterations"}], "}"}]}], "]"}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.9125965188868556`*^9, 
+  3.9125965201296487`*^9}},ExpressionUUID->"2df2dfea-e5df-48a4-a69d-\
+15c97c36ca8e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "Display", " ", "the", " ", "Mandelbrot", " ", "set", " ", "image", " ", 
+    "using", " ", "ImageAdjust", " ", "for", " ", "better", " ", 
+    RowBox[{"visibility", "."}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"ImageAdjust", "[", "mandelbrotImage", "]"}]}]], "Input",
+ CellChangeTimes->{{3.9125965283582325`*^9, 
+  3.912596529503847*^9}},ExpressionUUID->"1c048aba-7f68-4ea8-96d5-\
+15e31a70919f"],
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"ImageAdjust", "[", 
+    RowBox[{"Image", "[", 
+     RowBox[{"Rescale", "[", 
+      RowBox[{
+       RowBox[{"ParallelMap", "[", 
+        RowBox[{"mandelbrotSet", ",", "complexGrid", ",", 
+         RowBox[{"{", "2", "}"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "maxIterations"}], "}"}]}], "]"}], "]"}], "]"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{"xmin", ",", 
+     RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"xmax", ",", 
+     RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"ymin", ",", 
+     RowBox[{"-", "2"}], ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"ymax", ",", 
+     RowBox[{"-", "2"}], ",", "2"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.912596536503458*^9, 
+  3.912596537404155*^9}},ExpressionUUID->"96f1bf5b-9f49-462e-9498-\
+68b8b7b6dd4e"],
+
+Cell[BoxData[
+ RowBox[{"\n", 
+  RowBox[{"Colorize", "[", 
+   RowBox[{"mandelbrotImage", ",", 
+    RowBox[{"ColorFunction", "->", "\"\<Rainbow\>\""}]}], "]"}]}]], "Input",Ex\
+pressionUUID->"78d1dd17-b6b6-4d73-b9bb-065cc9c029dc"]
+},
+WindowSize->{576., 568.8},
+WindowMargins->{{Automatic, 0.6000000000001364}, {Automatic, 0}},
+FrontEndVersion->"13.0 for Microsoft Windows (64-bit) (December 2, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"8b154b4e-807b-41e3-81ec-3937ec670c50"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2117, 57, 200, "Input",ExpressionUUID->"a3539401-eb27-4396-a573-cc7befba56d3"],
+Cell[2678, 79, 937, 26, 105, "Input",ExpressionUUID->"9573df68-d6da-4695-b0ec-54b0f53799ae"],
+Cell[3618, 107, 934, 28, 124, "Input",ExpressionUUID->"c47eff85-45e2-4303-8023-2f9a02e5cfee"],
+Cell[4555, 137, 762, 20, 105, "Input",ExpressionUUID->"2df2dfea-e5df-48a4-a69d-15c97c36ca8e"],
+Cell[5320, 159, 458, 10, 67, "Input",ExpressionUUID->"1c048aba-7f68-4ea8-96d5-15e31a70919f"],
+Cell[5781, 171, 918, 27, 105, "Input",ExpressionUUID->"96f1bf5b-9f49-462e-9498-68b8b7b6dd4e"],
+Cell[6702, 200, 227, 5, 48, "Input",ExpressionUUID->"78d1dd17-b6b6-4d73-b9bb-065cc9c029dc"]
+}
+]
+*)
+
